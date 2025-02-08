@@ -1,0 +1,34 @@
+name: score_rosario
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+dependencies:
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  go_router: ^14.8.0
+  visibility_detector: ^0.4.0+2
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/images/fucsia.png
+    - assets/images/orange.png
+    - assets/images/pink.png
+    - assets/images/purple.png
+    - assets/images/logo.png
+    - assets/images/image1.png
+    - assets/images/image2.png
+    - assets/images/image3.png
+    - assets/images/image4.png
+    - assets/images/image5.png
+    - assets/images/mobile.png
