@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:score_rosario/config/router/app_router.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

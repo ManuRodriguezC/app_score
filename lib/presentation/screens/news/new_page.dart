@@ -3,31 +3,31 @@ import 'package:score_rosario/presentation/widgets/AppBar/app_bar_custom.dart';
 import 'package:score_rosario/presentation/widgets/BottomNavigation/bottom_navigation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class IndicePage extends StatefulWidget {
-  static const name = 'indice-page';
-  const IndicePage({super.key});
+class WebViewNew extends StatefulWidget {
+  final String url;
+  static const name = 'new-page';
+  const WebViewNew({super.key, required this.url});
 
   @override
-  State<IndicePage> createState() => _IndicePageState();
+  State<WebViewNew> createState() => _WebViewNewState();
 }
 
-class _IndicePageState extends State<IndicePage> {
+class _WebViewNewState extends State<WebViewNew> {
   late final WebViewController controller;
 
   @override
   void initState() {
     super.initState();
     controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(
-          Uri.parse("https://score-urosario.shinyapps.io/SCORE_MOVIL/"));
+      ..setJavaScriptMode(JavaScriptMode.disabled)
+      ..loadRequest(Uri.parse(widget.url));
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: const AppBarCustom(principal: true),
+        appBar: const AppBarCustom(principal: false),
         body: WebViewWidget(controller: controller),
         bottomNavigationBar: const CustomBottomNavigation(),
       ),

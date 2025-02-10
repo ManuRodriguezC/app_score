@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:score_rosario/datasource/info_carousel.dart';
+import 'package:score_rosario/infrastructure/datasource/info_carousel.dart';
 
 class ButtonPage extends StatefulWidget {
   final num currentPage;
@@ -21,6 +21,24 @@ class ButtonPage extends StatefulWidget {
 
 class _ButtonPageState extends State<ButtonPage> {
   double _containerHeight = 80;
+  late num _currentPage;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPage = widget.currentPage; // Se inicializa con el valor inicial
+  }
+
+  @override
+  void didUpdateWidget(covariant ButtonPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentPage != widget.currentPage) {
+      setState(() {
+        _currentPage =
+            widget.currentPage; // Se actualiza cuando cambia currentPage
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +54,22 @@ class _ButtonPageState extends State<ButtonPage> {
         ),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-            width: 55,
-            height: 55,
-            decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 127, 191, 170),
-                borderRadius: BorderRadius.circular(100)),
-            child: IconButton(
-              onPressed: widget.onBeforePage,
-              icon: const Icon(
-                Icons.arrow_back_rounded,
-                size: 32,
+          Opacity(
+            opacity: _currentPage > 0 ? 1 : 0,
+            child: Container(
+              width: 55,
+              height: 55,
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 127, 191, 170),
+                  borderRadius: BorderRadius.circular(100)),
+              child: IconButton(
+                onPressed: widget.onBeforePage,
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  size: 32,
+                ),
+                color: Colors.white,
               ),
-              color: Colors.white,
             ),
           ),
           Row(
@@ -70,19 +91,22 @@ class _ButtonPageState extends State<ButtonPage> {
               );
             }),
           ),
-          Container(
-            width: 55,
-            height: 55,
-            decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 127, 191, 170),
-                borderRadius: BorderRadius.circular(100)),
-            child: IconButton(
-              onPressed: widget.onNextPage,
-              icon: const Icon(
-                Icons.arrow_forward_rounded,
-                size: 32,
+          Opacity(
+            opacity: _currentPage == 3 ? 0 : 1,
+            child: Container(
+              width: 55,
+              height: 55,
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 127, 191, 170),
+                  borderRadius: BorderRadius.circular(100)),
+              child: IconButton(
+                onPressed: widget.onNextPage,
+                icon: const Icon(
+                  Icons.arrow_forward_rounded,
+                  size: 32,
+                ),
+                color: Colors.white,
               ),
-              color: Colors.white,
             ),
           )
         ]));

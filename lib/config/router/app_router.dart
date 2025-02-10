@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:score_rosario/presentation/screens/news/new_page.dart';
 import 'package:score_rosario/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(initialLocation: '/', routes: [
@@ -18,4 +19,12 @@ final appRouter = GoRouter(initialLocation: '/', routes: [
       path: '/events',
       name: EventsPage.name,
       builder: (context, state) => const EventsPage()),
+  GoRoute(
+    path: '/new_view/:url',
+    name: WebViewNew.name,
+    builder: (context, state) {
+      final url = Uri.decodeComponent(state.pathParameters['url']!);
+      return WebViewNew(url: url);
+    },
+  )
 ]);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:score_rosario/presentation/widgets/carousel/view_carousel.dart';
-import 'package:score_rosario/datasource/info_carousel.dart';
+import 'package:score_rosario/infrastructure/datasource/info_carousel.dart';
 
 class CarouselState extends StatefulWidget {
   @override

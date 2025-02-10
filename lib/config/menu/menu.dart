@@ -9,8 +9,8 @@ class Menu {
 }
 
 const appMenu = <Menu>[
-  Menu(title: "Inicio", link: "/", data: Icons.menu_book_rounded),
+  Menu(title: "Inicio", link: "/", data: Icons.home_rounded),
   Menu(title: "Noticias", link: "/news", data: Icons.newspaper_rounded),
-  Menu(title: "Indice", link: "/indice", data: Icons.read_more_rounded),
+  Menu(title: "Indice", link: "/indice", data: Icons.bar_chart_rounded),
   Menu(title: "Eventos", link: "/events", data: Icons.calendar_month_rounded)
 ];
