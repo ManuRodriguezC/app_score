@@ -1,22 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:score_rosario/domain/entities/event.dart';
+import 'package:device_calendar/device_calendar.dart' as addCalendar;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatefulWidget {
   final Event eventItem;
 
   const EventCard({super.key, required this.eventItem});
 
-  String _setDate(String value) {
-    final splitValue = value.split("T");
-    return '${splitValue[0]}';
+  @override
+  State<EventCard> createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
+  bool agregated = false;
+  final addCalendar.DeviceCalendarPlugin _deviceCalendarPlugin =
+      addCalendar.DeviceCalendarPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    tz.initializeTimeZones();
+    _verificationExists();
   }
 
-  String _setHour(String value) {
-    final splitValue = value.split("T");
-    return splitValue[1].toString().replaceFirst(RegExp(r'Z$'), '');
+  Future<void> _verificationExists() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      agregated = prefs.getBool('evento_${widget.eventItem.titulo}') ?? false;
+    });
   }
 
-  // @override
+  Future<void> _guardarEstadoAgregado() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('evento_${widget.eventItem.titulo}', true);
+  }
+
+  Future<void> solicitarPermisos() async {
+    if (await Permission.calendar.isDenied) {
+      await Permission.calendar.request();
+    }
+  }
+
+  DateTime _parseDateTime(String dateTimeString) {
+    try {
+      return DateTime.parse(dateTimeString)
+          .toLocal(); // Asegura que sea en hora local
+    } catch (e) {
+      print("Error al convertir la fecha: $e");
+      return DateTime.now(); // Usa la fecha actual en caso de error
+    }
+  }
+
+  tz.TZDateTime _convertToTZDateTime(DateTime dateTime) {
+    final location = tz.getLocation(
+        'America/Bogota'); // Ajusta según tu zona horaria
+    return tz.TZDateTime.from(dateTime, location);
+  }
+
+  Future<void> agregarEvento() async {
+    try {
+      await solicitarPermisos();
+      var calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+      
+      final DateTime start = _parseDateTime(widget.eventItem.fecha);
+      final DateTime end = start.add(const Duration(hours: 2));
+
+      final tz.TZDateTime tzStart = _convertToTZDateTime(start);
+      final tz.TZDateTime tzEnd = _convertToTZDateTime(end);
+      
+      if (calendarsResult.isSuccess && calendarsResult.data!.isNotEmpty) {
+        final calendarId = calendarsResult.data!.first.id;
+        final event = addCalendar.Event(
+          calendarId,
+          title: widget.eventItem.titulo,
+          description: widget.eventItem.parrafo,
+          location: widget.eventItem.lugar,
+          start: tzStart,
+          end: tzEnd,
+        );
+        final createEventResult =
+            await _deviceCalendarPlugin.createOrUpdateEvent(event);
+        if (createEventResult!.isSuccess) {
+          _guardarEstadoAgregado();
+          setState(() {
+            agregated = true;
+          });
+        } else {
+          throw Exception("No se pudo agregar el evento al calendario.");
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,73 +117,60 @@ class EventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  eventItem
-                      .imagen, // ✅ Cambia eventItem.imagen por widget.eventItem.imagen
-                  fit: BoxFit.cover,
-                  height: 200,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                widget.eventItem.imagen,
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              widget.eventItem.titulo,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Fecha:",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.eventItem.fecha.split("T")[0]),
+                  ],
                 ),
-              ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Hora:",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.eventItem.fecha
+                        .split("T")[1]
+                        .replaceFirst(RegExp(r'Z\$'), '')),
+                  ],
+                ),
+              ],
             ),
-            Text(
-              eventItem.titulo,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 10),
-            const Text("Lugar:",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-            Text(
-              eventItem.lugar,
-              style: const TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-            const SizedBox(height: 10),
-            Row(children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Fecha:",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  Text(
-                    _setDate(eventItem.fecha),
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 130),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Hora:",
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  Text(
-                    _setHour(eventItem.fecha),
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ],
-              )
-            ]),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: agregarEvento,
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    const Color.fromARGB(255, 77, 54, 191), // Color de fondo
-                foregroundColor: Colors.white, // Color del texto
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 6), // Espaciado interno
+                backgroundColor: agregated
+                    ? Colors.grey
+                    : const Color.fromARGB(255, 77, 54, 191),
+                foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10), // Bordes redondeados
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text("Agregar al Calendario"),
-            )
+              child: Text(agregated ? "Agregado" : "Agregar al Calendario"),
+            ),
           ],
         ),
       ),
