@@ -19,7 +19,7 @@ const pages = [
     'size': 'full',
     'parraf':
         'Visualiza, filtra y analiza las estadisticas y graficos generados durante el año.',
-    'image': 'mobile.png',
+    'image': 'indices.jpeg',
     'color': '0xFF7037C9',
   },
   {
@@ -27,7 +27,7 @@ const pages = [
     'subtitle': 'Eventos',
     'parraf':
         'permanece informado sobre los proximos eventos que llevara a cabo la Universidad, recuerda agregarlos en tu calendario.',
-    'image': 'mobile.png',
+    'image': 'calendar.jpeg',
     'color': '0xFFE31952',
   },
 ];

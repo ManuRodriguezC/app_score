@@ -15,6 +15,7 @@ class EventsPage extends StatelessWidget {
 
     return const SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBarCustom(principal: true),
         body: Column(children: [
           Padding(

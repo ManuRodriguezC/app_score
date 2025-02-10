@@ -48,6 +48,8 @@ flutter:
     - assets/images/logonegro.png
     - assets/images/rosario.jpg
     - assets/images/logo_urosario.png
+    - assets/images/indices.jpeg
+    - assets/images/calendar.jpeg
 
 flutter_icons:
   android: true
@@ -55,7 +57,5 @@ flutter_icons:
   image_path: "assets/images/logo_urosario.png"
 
 flutter_native_splash:
-  color: "#ffffff"
+  color: "#7FBFAA"
   image: "assets/images/logo_score.jpg"
-  android: true
-  ios: true
