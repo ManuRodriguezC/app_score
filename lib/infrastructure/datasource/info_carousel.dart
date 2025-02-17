@@ -1,7 +1,7 @@
 const pages = [
   {
     'subtitle': 'Bienvenido a Score Rosario',
-    'parraf': 'Podrás conocer sobres noticias, eventos e índices.',
+    'parraf': 'Podrás conocer sobre noticias, eventos e índices.',
     'image': 'mobile.png',
   },
   {
@@ -12,7 +12,7 @@ const pages = [
   {
     'subtitle': 'Índices',
     'parraf':
-        'Visualiza, filtra y analiza las estadísticas y gráficos generados durante el año.',
+        'Visualiza, filtra y analiza las estadísticas y gráficos de Score Rosario.',
     'image': 'indices.png',
   },
   {

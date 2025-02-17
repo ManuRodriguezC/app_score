@@ -1,4 +1,4 @@
-package com.scorerosario.score_rosario
+package com.ScoreUR.score_rosario
 
 import io.flutter.embedding.android.FlutterActivity
 
