@@ -1,33 +1,24 @@
 const pages = [
   {
-    'background': 'pink.png',
     'subtitle': 'Bienvenido a Score Rosario',
-    'parraf': 'Podras conocer sobres noticias, eventos e indices.',
+    'parraf': 'Podrás conocer sobres noticias, eventos e índices.',
     'image': 'mobile.png',
-    'color': '0xFFE31952',
   },
   {
-    'background': 'orange.png',
     'subtitle': 'Noticias',
-    'parraf': 'Conoce las ultimas novedades y noticias de la Universidad.',
-    'image': 'mobile.png',
-    'color': '0xFFF25430',
+    'parraf': 'Conoce las Últimas novedades y noticias de la Universidad.',
+    'image': 'news.png',
   },
   {
-    'background': 'purple.png',
-    'subtitle': 'Indices',
-    'size': 'full',
+    'subtitle': 'Índices',
     'parraf':
-        'Visualiza, filtra y analiza las estadisticas y graficos generados durante el año.',
-    'image': 'indices.jpeg',
-    'color': '0xFF7037C9',
+        'Visualiza, filtra y analiza las estadísticas y gráficos generados durante el año.',
+    'image': 'indices.png',
   },
   {
-    'background': 'pink.png',
     'subtitle': 'Eventos',
     'parraf':
-        'permanece informado sobre los proximos eventos que llevara a cabo la Universidad, recuerda agregarlos en tu calendario.',
-    'image': 'calendar.jpeg',
-    'color': '0xFFE31952',
+        'Permanece informado sobre los próximos eventos que llevara a cabo la Universidad.',
+    'image': 'event.png',
   },
 ];

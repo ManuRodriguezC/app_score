@@ -36,7 +36,6 @@ class _CarouselState extends State<CarouselState> {
             subtitle: page['subtitle'] ?? '',
             parraf: page['parraf'] ?? '',
             image: page['image'] ?? '',
-            size: page['size'] ?? '',
             onNextPage: _nextPage,
             onBeforePage: _beforePage,
             end: page['end'] == "end" ? true : false,

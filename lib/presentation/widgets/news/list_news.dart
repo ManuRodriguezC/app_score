@@ -18,8 +18,12 @@ class ListNews extends StatelessWidget {
               child: CircularProgressIndicator()); // 🔄 Muestra un loader
         } else if (snapshot.hasError) {
           return Center(
-              child: Text(
-                  "Error: ${snapshot.error}")); // ❌ Muestra el error si hay
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                Image.asset("assets/images/notfound.png"),
+                const Text("Error, revisa la conexión a tu red."),
+              ])); // ❌ Muestra el error si hay
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(
               child: Text("No hay noticias disponibles")); // 📭 Si no hay datos

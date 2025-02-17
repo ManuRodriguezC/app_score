@@ -41,7 +41,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: const Color.fromARGB(255, 127, 191, 170),
+      backgroundColor: Colors.white,
       selectedItemColor: Colors.black,
       showUnselectedLabels: false,
       showSelectedLabels: false,
@@ -56,15 +56,17 @@ class CustomBottomNavigation extends StatelessWidget {
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: selectedIndex == index ? Colors.white : Colors.transparent,
+              color: selectedIndex == index
+                  ? const Color.fromARGB(255, 127, 191, 170)
+                  : Colors.transparent,
               shape: BoxShape.circle,
             ),
             child: Icon(
               item.data,
               size: 35,
               color: selectedIndex == index
-                  ? const Color.fromARGB(255, 127, 191, 170)
-                  : Colors.white,
+                  ? Colors.white
+                  : const Color.fromARGB(255, 127, 191, 170),
             ),
           ),
           label: item.title,

@@ -56,7 +56,13 @@ class _AppBarCustomState extends State<AppBarCustom> {
                         height: 50,
                       ),
                 // Ícono de notificaciones
-                const Icon(Icons.menu_rounded, color: Colors.white, size: 30),
+                IconButton(
+                  iconSize: 30,
+                  icon: const Icon(Icons.menu),
+                  onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                  },
+                ),
               ],
             )),
         Positioned(

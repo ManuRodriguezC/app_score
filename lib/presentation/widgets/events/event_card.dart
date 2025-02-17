@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:score_rosario/domain/entities/event.dart';
-import 'package:device_calendar/device_calendar.dart' as addCalendar;
+import 'package:add_2_calendar/add_2_calendar.dart' as AddEvent;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 class EventCard extends StatefulWidget {
   final Event eventItem;
@@ -17,13 +14,10 @@ class EventCard extends StatefulWidget {
 
 class _EventCardState extends State<EventCard> {
   bool agregated = false;
-  final addCalendar.DeviceCalendarPlugin _deviceCalendarPlugin =
-      addCalendar.DeviceCalendarPlugin();
 
   @override
   void initState() {
     super.initState();
-    tz.initializeTimeZones();
     _verificationExists();
   }
 
@@ -39,65 +33,37 @@ class _EventCardState extends State<EventCard> {
     await prefs.setBool('evento_${widget.eventItem.titulo}', true);
   }
 
-  Future<void> solicitarPermisos() async {
-    if (await Permission.calendar.isDenied) {
-      await Permission.calendar.request();
-    }
-  }
-
   DateTime _parseDateTime(String dateTimeString) {
     try {
-      return DateTime.parse(dateTimeString)
-          .toLocal(); // Asegura que sea en hora local
+      return DateTime.parse(dateTimeString).toLocal();
     } catch (e) {
-      print("Error al convertir la fecha: $e");
-      return DateTime.now(); // Usa la fecha actual en caso de error
+      return DateTime.now();
     }
   }
 
-  tz.TZDateTime _convertToTZDateTime(DateTime dateTime) {
-    final location = tz.getLocation(
-        'America/Bogota'); // Ajusta según tu zona horaria
-    return tz.TZDateTime.from(dateTime, location);
-  }
+  void agregarEvento() {
+    final DateTime start = _parseDateTime(widget.eventItem.fecha);
+    final DateTime end = start.add(const Duration(hours: 2));
 
-  Future<void> agregarEvento() async {
-    try {
-      await solicitarPermisos();
-      var calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
-      
-      final DateTime start = _parseDateTime(widget.eventItem.fecha);
-      final DateTime end = start.add(const Duration(hours: 2));
+    final AddEvent.Event event = AddEvent.Event(
+      title: widget.eventItem.titulo,
+      description: widget.eventItem.parrafo,
+      location: widget.eventItem.lugar,
+      startDate: start,
+      endDate: end,
+      allDay: false,
+    );
 
-      final tz.TZDateTime tzStart = _convertToTZDateTime(start);
-      final tz.TZDateTime tzEnd = _convertToTZDateTime(end);
-      
-      if (calendarsResult.isSuccess && calendarsResult.data!.isNotEmpty) {
-        final calendarId = calendarsResult.data!.first.id;
-        final event = addCalendar.Event(
-          calendarId,
-          title: widget.eventItem.titulo,
-          description: widget.eventItem.parrafo,
-          location: widget.eventItem.lugar,
-          start: tzStart,
-          end: tzEnd,
-        );
-        final createEventResult =
-            await _deviceCalendarPlugin.createOrUpdateEvent(event);
-        if (createEventResult!.isSuccess) {
-          _guardarEstadoAgregado();
-          setState(() {
-            agregated = true;
-          });
-        } else {
-          throw Exception("No se pudo agregar el evento al calendario.");
-        }
-      }
-    } catch (e) {
+    AddEvent.Add2Calendar.addEvent2Cal(event).then((_) {
+      _guardarEstadoAgregado();
+      setState(() {
+        agregated = true;
+      });
+    }).catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
+        SnackBar(content: Text("Error al agregar el evento: $e")),
       );
-    }
+    });
   }
 
   @override
@@ -133,15 +99,18 @@ class _EventCardState extends State<EventCard> {
             ),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Fecha:",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.eventItem.fecha.split("T")[0]),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 50),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Fecha:",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(widget.eventItem.fecha.split("T")[0]),
+                    ],
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

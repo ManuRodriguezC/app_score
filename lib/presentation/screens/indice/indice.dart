@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:score_rosario/presentation/widgets/AppBar/app_bar_custom.dart';
 import 'package:score_rosario/presentation/widgets/BottomNavigation/bottom_navigation.dart';
+import 'package:score_rosario/presentation/widgets/drawer/drawer.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class IndicePage extends StatefulWidget {
@@ -28,6 +29,7 @@ class _IndicePageState extends State<IndicePage> {
     return SafeArea(
       child: Scaffold(
         appBar: const AppBarCustom(principal: true),
+        drawer: const CustomDrawer(),
         body: WebViewWidget(controller: controller),
         bottomNavigationBar: const CustomBottomNavigation(),
       ),

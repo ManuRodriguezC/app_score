@@ -26,5 +26,17 @@ final appRouter = GoRouter(initialLocation: '/', routes: [
       final url = Uri.decodeComponent(state.pathParameters['url']!);
       return WebViewNew(url: url);
     },
-  )
+  ),
+  GoRoute(
+      path: '/quienesSomos',
+      name: QuienesSomos.name,
+      builder: (context, state) => const QuienesSomos()),
+  GoRoute(
+      path: '/politicas',
+      name: Politicas.name,
+      builder: (context, state) => const Politicas()),
+  GoRoute(
+      path: '/ayuda',
+      name: Ayuda.name,
+      builder: (context, state) => const Ayuda())
 ]);
