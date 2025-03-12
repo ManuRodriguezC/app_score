@@ -63,5 +63,7 @@
 		<string>Esta app necesita acceso al calendario para agregar eventos.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
 	</dict>
 </plist>

@@ -20,6 +20,7 @@ dependencies:
   onesignal_flutter: ^5.2.9
   permission_handler: ^11.3.1
   shared_preferences: ^2.5.1
+  smooth_page_indicator: ^1.2.1
   url_launcher: ^6.3.1
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.10.0
@@ -47,14 +48,27 @@ flutter:
     - assets/images/indices.png
     - assets/images/event.png
     - assets/images/logo_score.jpg
+    - assets/images/logo_score.png
+    - assets/images/score.png
     - assets/images/news.png
     - assets/images/notfound.png
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo_urosario.png"
+  image_path: "assets/images/score.png"
+  macos:
+    generate: true
+    image_path: "assets/images/score.png"
 
 flutter_native_splash:
-  color: "#7FBFAA"
-  image: "assets/images/logo_score.jpg"
+  color: "#FFFFFF"
+  image: "assets/images/score.png"
+  android: true
+  ios: true
+  web: false
+  android_gravity: center
+  # fullscreen: true
+  android_12:
+    image: "assets/images/score.png"
+    icon_background_color: "#FFFFFF"
